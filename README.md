@@ -2,22 +2,103 @@
 
 ## Installation
 
+Download InContextSDK.framework.zip, extract it and add InContextSDK.framework to your project. It should appear listed under *General > Linked Frameworks and Libraries* and *General > Embedded Binaries*.
 
-### Start a task
+For objective-c projects, also set *Build Settings > Always Embed Swift Standard Libraries* to `Yes`
+
+Finally, frameworks should be added to the path already, in case they're not add `@executable_path/Frameworks` to *Build Settings > Runpath Search Paths*.
+
+## Usage
+
+Starting a task and and retrieving its results works similarly for both for swift and objective-c.
+- A task is started by instantiating the `TaskViewController` from the `TaskStoryboard` and showing it.
+- ProjectID, SubjectGroupID and UserHash are set using the `data` property of the task controller.
+- Finally, to receive the task end event and success, we can use the `delegate` property of the task controller. The listener needs to implement the `TaskDelegate` protocol. In the examples, we've used the main ViewController for that purpose.
+
+#### Swift
 
 ```swift
-let storyboard = UIStoryboard(name: "Task", bundle: Bundle(identifier: "com.eyesquare.InContextSDK"))
-let controller = storyboard.instantiateViewController(withIdentifier: "TaskViewController") as! TaskViewController
+import UIKit
+import InContextSDK
 
-controller.delegate = self
-controller.data = TaskData(ProjectID: "fallback-demo", SubjectGroupID: "fb", UserHash: "carlos")
 
-self.present(controller, animated: false, completion: nil)
+class ViewController: UIViewController, TaskDelegate {
+
+	...
+
+	//---------------------------------------------------------------------------
+	@IBAction func onButtonPressed(_ sender: UIButton) {
+
+		// instantiate the controller
+		let storyboard = UIStoryboard(name: "Task", bundle: Bundle(identifier: "com.eyesquare.InContextSDK"))
+		let controller = storyboard.instantiateViewController(withIdentifier: "TaskViewController") as! TaskViewController
+
+		// define task variables
+		let taskData = TaskData(ProjectID: "2017-05_DE030_j2vyo5nj", SubjectGroupID: "fbpers", UserHash: "1234")
+
+		// set data and task end listener
+		controller.delegate = self
+		controller.data = taskData
+
+		// start task
+		self.present(controller, animated: false, completion: nil)
+	}
+
+
+	//---------------------------------------------------------------------------
+	func taskCallback(_ success: Bool){
+		// handle success
+	}
+}
 ```
+
+#### Objective-c
+
+##### ViewController.h:
+```objective-c
+#import <UIKit/UIKit.h>
+#import "InContextSDK/InContextSDK-Swift.h"
+
+@interface ViewController : UIViewController <TaskDelegate>
+
+@end
+```
+
+##### ViewController.m:
 
 ```objective-c
-Storyboard*         storyboard = [UIStoryboard storyboardWithName:@"Task" bundle: [NSBundle bundleWithIdentifier:@"com.eyesquare.frm"]];
-TaskViewController* controller = (TaskViewController*)[storyboard instantiateViewControllerWithIdentifier:@"TaskViewController"];
+#import "ViewController.h"
 
-[self presentViewController:controller animated:NO completion:nil];
+@interface ViewController ()
+@end
+
+@implementation ViewController
+
+...
+
+//---------------------------------------------------------------------------
+- (IBAction)onButtonPressed:(id)sender {
+
+	// instantiate the controller
+	UIStoryboard*       storyboard = [UIStoryboard storyboardWithName:@"Task" bundle: [NSBundle bundleWithIdentifier:@"com.eyesquare.InContextSDK"]];
+	TaskViewController* controller = (TaskViewController*)[storyboard instantiateViewControllerWithIdentifier:@"TaskViewController"];
+
+	// define task variables
+	TaskData* taskData = [[TaskData alloc] initWithProjectID:@"2017-05_DE030_j2vyo5nj" SubjectGroupID:@"fbpers" UserHash:@"1234"];
+	
+	// set data and task end listener
+	controller.delegate = self;
+	controller.data     = taskData;
+	
+	// start task
+	[self presentViewController:controller animated:NO completion:nil];
+}
+
+
+//---------------------------------------------------------------------------
+- (void)taskCallback :(bool)success {
+	// handle success
+}
+@end
 ```
+
