@@ -1,5 +1,7 @@
 # ios-sdk
 
+The `-dev` version of the framework is a universal build containing both the simulator and device architectures. Since the AppStore won't accept universal fat binaries there's a second version built only for devices. Alternatively you could use just `-dev` framework and combine it with a script to strip the unused architectures before archiving.
+
 ## Installation
 
 Download InContextSDK.framework.zip, extract it and add InContextSDK.framework to your project. It should appear listed under *General > Linked Frameworks and Libraries* and *General > Embedded Binaries*.
