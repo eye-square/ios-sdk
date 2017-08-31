@@ -48,7 +48,7 @@ class ViewController: UIViewController, TaskDelegate {
 
 
 	//---------------------------------------------------------------------------
-	func taskCallback(_ success: Bool){
+	func taskCallback(_ success: Int){
 		// handle success
 	}
 }
@@ -98,7 +98,7 @@ class ViewController: UIViewController, TaskDelegate {
 
 
 //---------------------------------------------------------------------------
-- (void)taskCallback :(bool)success {
+- (void)taskCallback :(int)success {
 	// handle success
 }
 @end
