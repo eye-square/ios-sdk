@@ -17,6 +17,15 @@ Starting a task and and retrieving its results works similarly for both for swif
 - ProjectID, SubjectGroupID and UserHash are set using the `data` property of the task controller.
 - Finally, to receive the task end event and success, we can use the `delegate` property of the task controller. The listener needs to implement the `TaskDelegate` protocol. In the examples, we've used the main ViewController for that purpose.
 
+### possible success values:
+
+success is an integer and represents the result of the task.
+
+* -1: a technical error occured, the subject couldn't start/get through the survey. This is often caused by wrongly passed ProjectIds and or SubjectGroupIds
+* 0: the success criteria of the ad/subjectGroup wasn't met
+* 1: the success criteria of the ad/subjectGroup was met
+* 2: the user canceled the run early
+
 #### Swift
 
 ```swift
