@@ -57,7 +57,7 @@ class ViewController: UIViewController, TaskDelegate {
 
 
 	//---------------------------------------------------------------------------
-	func taskCallback(_ success: Int){
+	func taskCallback(_ data: [String: String]){
 		// handle success
 	}
 }
@@ -107,8 +107,10 @@ class ViewController: UIViewController, TaskDelegate {
 
 
 //---------------------------------------------------------------------------
-- (void)taskCallback :(int)success {
-	// handle success
+- (void)taskCallback :(NSDictionary<NSString *,NSString *>*)data {
+    int success = [data[@"success"] intValue];
+    int fallback = [data[@"fallback"] intValue];
+    // handle success
 }
 @end
 ```
